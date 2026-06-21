@@ -1,13 +1,18 @@
 {
   "name": "cpms-react",
   "version": "1.0.0",
-  "description": "Custodial Property Management System built with React, PHP, and XAMPP MariaDB",
+  "description": "Custodial Property Management System built with React, Node.js, and XAMPP MariaDB",
   "type": "module",
   "private": true,
   "dependencies": {
     "@zxing/browser": "0.1.5",
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
     "jszip": "^3.10.1",
     "lucide-react": "^0.263.1",
+    "multer": "^2.2.0",
+    "mysql2": "^3.22.5",
     "qrcode": "^1.5.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -16,6 +21,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.0.0",
+    "concurrently": "^10.0.3",
     "vite": "^7.3.1"
   },
   "overrides": {
@@ -23,8 +29,12 @@
     "@zxing/library": "0.21.3"
   },
   "scripts": {
-    "dev": "vite",
-    "api": "C:\\xampp\\php\\php.exe -S 127.0.0.1:8000 api/index.php",
+    "dev": "concurrently -k -n API,WEB -c green,cyan \"node --watch server/index.js\" \"vite\"",
+    "dev:web": "vite",
+    "api": "node --watch server/index.js",
+    "api:start": "node server/index.js",
+    "create-admin": "node server/create-admin.js",
+    "test:api": "node server/smoke-test.js",
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint src --ext js,jsx"

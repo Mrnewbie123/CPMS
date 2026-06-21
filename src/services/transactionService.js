@@ -15,5 +15,14 @@ export const transactionService = {
   },
   getTransactionStats() {
     return apiRequest('/transactions/stats')
+  },
+  getBorrowings(filters = {}) {
+    return apiRequest('/borrowings', { query: filters })
+  },
+  createBorrowing(data) {
+    return apiRequest('/borrowings', { method: 'POST', body: data })
+  },
+  returnBorrowing(id, data) {
+    return apiRequest(`/borrowings/${id}/return`, { method: 'PUT', body: data })
   }
 }

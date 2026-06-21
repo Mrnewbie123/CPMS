@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS items (
   warranty_expiry DATE NULL,
   maintenance_schedule VARCHAR(40) NULL,
   insurance_policy VARCHAR(120) NULL,
-  status ENUM('Active', 'Assigned', 'In Repair', 'Returned', 'Disposed', 'Lost') NOT NULL DEFAULT 'Active',
+  status ENUM('Active', 'Assigned', 'Borrowed', 'In Repair', 'Returned', 'Disposed', 'Lost') NOT NULL DEFAULT 'Active',
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   CONSTRAINT fk_items_custodian FOREIGN KEY (custodian_id) REFERENCES custodians(id) ON DELETE SET NULL,
@@ -113,6 +113,32 @@ CREATE TABLE IF NOT EXISTS transactions (
   CONSTRAINT fk_transaction_user FOREIGN KEY (issued_by) REFERENCES users(id) ON DELETE RESTRICT,
   INDEX idx_transaction_date (transaction_date),
   INDEX idx_transaction_type (transaction_type)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS borrow_records (
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  item_id BIGINT UNSIGNED NOT NULL,
+  borrower_name VARCHAR(180) NOT NULL,
+  borrower_reference VARCHAR(100) NULL,
+  department VARCHAR(120) NULL,
+  contact_number VARCHAR(40) NULL,
+  purpose TEXT NULL,
+  borrowed_date DATE NOT NULL,
+  due_date DATE NOT NULL,
+  returned_date DATETIME NULL,
+  condition_out ENUM('New', 'Good', 'Fair', 'Damaged', 'Under Repair') NOT NULL DEFAULT 'Good',
+  condition_return ENUM('New', 'Good', 'Fair', 'Damaged', 'Under Repair') NULL,
+  remarks TEXT NULL,
+  status ENUM('Borrowed', 'Overdue', 'Returned', 'Cancelled') NOT NULL DEFAULT 'Borrowed',
+  recorded_by BIGINT UNSIGNED NOT NULL,
+  returned_by BIGINT UNSIGNED NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT fk_borrow_item FOREIGN KEY (item_id) REFERENCES items(id) ON DELETE RESTRICT,
+  CONSTRAINT fk_borrow_recorded_by FOREIGN KEY (recorded_by) REFERENCES users(id) ON DELETE RESTRICT,
+  CONSTRAINT fk_borrow_returned_by FOREIGN KEY (returned_by) REFERENCES users(id) ON DELETE RESTRICT,
+  INDEX idx_borrow_status_due (status, due_date),
+  INDEX idx_borrow_item (item_id)
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS maintenance_records (

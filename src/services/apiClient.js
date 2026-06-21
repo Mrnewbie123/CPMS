@@ -33,7 +33,7 @@ export async function apiRequest(path, options = {}) {
   } catch {
     return {
       success: false,
-      message: 'Cannot connect to the CPMS API. Start XAMPP MySQL and the PHP API server.'
+      message: 'Cannot connect to the CPMS API. Start XAMPP MySQL and the Node.js API server.'
     }
   }
 }

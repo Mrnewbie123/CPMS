@@ -9,6 +9,7 @@ import { AssetScanner } from '../components/AssetScanner'
 import { AssetLabelModal } from '../components/AssetLabelModal'
 import { AssetAttachments } from '../components/AssetAttachments'
 import { FormOverlay } from '../components/FormOverlay'
+import { CursorTooltip } from '../components/CursorTooltip'
 
 function createEmptyItemForm() {
   return {
@@ -672,21 +673,31 @@ export default function InventoryPage() {
                       </span>
                     </td>
                     <td className="action-buttons">
-                      <button className="btn-icon" onClick={() => setLabelItem(item)} title="Print asset label" aria-label="Print asset label"><Printer size={16} /></button>
-                      <button className="btn-icon" onClick={() => setAttachmentItem(item)} title="Photos and files" aria-label="Open photos and files"><Paperclip size={16} /></button>
+                      <CursorTooltip label="Print asset label">
+                        <button className="btn-icon" onClick={() => setLabelItem(item)} aria-label="Print asset label"><Printer size={16} /></button>
+                      </CursorTooltip>
+                      <CursorTooltip label="Photos and files">
+                        <button className="btn-icon" onClick={() => setAttachmentItem(item)} aria-label="Open photos and files"><Paperclip size={16} /></button>
+                      </CursorTooltip>
                       {canManage && <>
-                      <button
-                        className="btn-icon btn-edit"
-                        onClick={() => handleEdit(item)}
-                      >
-                        <Edit size={16} />
-                      </button>
-                      <button
-                        className="btn-icon btn-delete"
-                        onClick={() => handleDelete(item.id)}
-                      >
-                        <Trash2 size={16} />
-                      </button>
+                      <CursorTooltip label="Edit asset">
+                        <button
+                          className="btn-icon btn-edit"
+                          onClick={() => handleEdit(item)}
+                          aria-label="Edit asset"
+                        >
+                          <Edit size={16} />
+                        </button>
+                      </CursorTooltip>
+                      <CursorTooltip label="Delete asset">
+                        <button
+                          className="btn-icon btn-delete"
+                          onClick={() => handleDelete(item.id)}
+                          aria-label="Delete asset"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </CursorTooltip>
                       </>}
                     </td>
                   </tr>
